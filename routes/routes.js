@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         var input = req.body;
-        req.logger.info(input);
         const ormLib = req.app.get('ormLib')
         const userRepository = await ormLib.getRepository(User);
         const settingRepository = await ormLib.getRepository(Setting);
@@ -72,8 +71,9 @@ router.get("/email", async (req, res) => {
         const ormLib = req.app.get('ormLib')
         const userRepository = await ormLib.getRepository(User);
         var record= await userRepository.findOne({where:{email:email},relations: ['setting']});
-        if (record.length == 0) {
-            return res.status(200).json({ "message": "No Data Found" });
+    
+        if (record == null || record.length == 0) {
+            return res.status(200).json({ "message": "No Data Found","data": []});
         }
         console.log(record);
         userResp = utils.parseUserOutput(record);
@@ -81,7 +81,7 @@ router.get("/email", async (req, res) => {
     }
     catch (error) {
         console.error("Error while fetching user :", error)
-        return res.status(500).json({ "message": error});
+        return res.status(500).json({ "message": error, "data": []});
     }
 });
 

@@ -4,8 +4,8 @@ const app = express();
 
 const {dbConfig} = require('./config.js');
 
-const MyOrmLib = require('grootorm/index.js');
-const ormLib = new MyOrmLib();
+const GrootORM = require('grootorm/index.js');
+const ormLib = new GrootORM();
 (async () => {
     console.log("initializing db")
     await ormLib.initialize(dbConfig);
